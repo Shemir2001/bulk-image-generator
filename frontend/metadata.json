@@ -1,0 +1,4 @@
+{
+  "name": "NanoGen Bulk - Advanced Image Generator",
+  "description": "A highly efficient bulk image generation tool powered by the Gemini Nano Banana model (gemini-2.5-flash-image). Features a robust task queue, bulk prompt ingestion, and gallery management."
+}
