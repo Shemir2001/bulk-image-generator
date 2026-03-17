@@ -91,7 +91,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ settings, onSettin
   };
 
   return (
-    <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 space-y-6 shadow-sm transition-colors duration-300">
+    <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 sm:p-5 space-y-4 sm:space-y-6 shadow-sm transition-colors duration-300">
 
       {/* Header */}
       <div className="flex items-center space-x-2 text-zinc-900 dark:text-zinc-100 border-b border-zinc-100 dark:border-zinc-800 pb-4">
@@ -165,7 +165,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ settings, onSettin
           <Monitor className="w-4 h-4" />
           Aspect Ratio
         </label>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-5 sm:grid-cols-5 gap-2">
           {(['1:1', '3:4', '4:3', '9:16', '16:9'] as const).map((ratio) => (
             <button
               key={ratio}

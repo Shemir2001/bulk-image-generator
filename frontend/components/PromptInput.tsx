@@ -34,7 +34,7 @@ export const PromptInput: React.FC<PromptInputProps> = ({ onAddTasks }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 flex flex-col h-full shadow-sm transition-colors duration-300">
+    <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 sm:p-5 flex flex-col h-full shadow-sm transition-colors duration-300">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-2 text-zinc-900 dark:text-zinc-100">
           <Layers className="w-5 h-5 text-yellow-500" />
@@ -52,7 +52,7 @@ export const PromptInput: React.FC<PromptInputProps> = ({ onAddTasks }) => {
       
       <div className="relative flex-grow group">
         <textarea
-          className="w-full h-full min-h-[150px] bg-zinc-50 dark:bg-zinc-950/50 border border-zinc-200 dark:border-zinc-700 rounded-lg p-4 text-sm text-zinc-800 dark:text-zinc-200 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 focus:border-yellow-500 resize-none font-mono leading-relaxed transition-all"
+          className="w-full h-full min-h-[120px] sm:min-h-[150px] bg-zinc-50 dark:bg-zinc-950/50 border border-zinc-200 dark:border-zinc-700 rounded-lg p-3 sm:p-4 text-sm text-zinc-800 dark:text-zinc-200 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 focus:border-yellow-500 resize-none font-mono leading-relaxed transition-all"
           placeholder={`Enter prompts here...\nOne prompt per line\nExample:\nA cyberpunk city in rain\nA cute robot eating a banana\nSpace station at sunset`}
           value={text}
           onChange={(e) => setText(e.target.value)}

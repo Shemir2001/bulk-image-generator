@@ -658,14 +658,14 @@ const App: React.FC = () => {
   const apiWarningMessage = 'Gemini image model requires a paid API. Switch to Hugging Face or Pollinations for free generation.';
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-black text-zinc-900 dark:text-zinc-200 p-4 md:p-8 font-sans transition-colors duration-300">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="min-h-screen bg-zinc-50 dark:bg-black text-zinc-900 dark:text-zinc-200 px-3 py-4 sm:p-4 md:p-8 font-sans transition-colors duration-300">
+      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
 
         {/* Header */}
-        <header className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-zinc-200 dark:border-zinc-800 gap-4">
+        <header className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 sm:pb-6 border-b border-zinc-200 dark:border-zinc-800 gap-3 sm:gap-4">
           <div>
-            <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-500 to-orange-600 dark:from-yellow-400 dark:to-orange-500 flex items-center gap-3">
-              <Zap className="text-yellow-500 dark:text-yellow-400 fill-current w-8 h-8" />
+            <h1 className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-500 to-orange-600 dark:from-yellow-400 dark:to-orange-500 flex items-center gap-2 sm:gap-3">
+              <Zap className="text-yellow-500 dark:text-yellow-400 fill-current w-6 h-6 sm:w-8 sm:h-8" />
               NanoGen Bulk
             </h1>
             <p className="text-zinc-500 dark:text-zinc-500 mt-2 max-w-xl">
@@ -681,13 +681,13 @@ const App: React.FC = () => {
               {settings.provider === 'gemini' && '⚡ Gemini'}
             </div>
 
-            {/* <button
+            <button
               onClick={toggleTheme}
               className="p-2 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-yellow-500 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors shadow-sm"
               title="Toggle Theme"
             >
               {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            </button> */}
+            </button>
 
             <button
               onClick={handleLogout}
@@ -711,15 +711,15 @@ const App: React.FC = () => {
         )}
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-[calc(100vh-200px)] min-h-[600px]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 lg:h-[calc(100vh-200px)] lg:min-h-[600px]">
 
-          <div className="lg:col-span-4 flex flex-col gap-6 h-full overflow-y-auto pr-2 pb-2">
+          <div className="lg:col-span-4 flex flex-col gap-4 sm:gap-6 lg:h-full lg:overflow-y-auto lg:pr-2 pb-2">
             <PromptInput onAddTasks={addTasks} />
             <SettingsPanel settings={settings} onSettingsChange={setSettings} />
 
-            <div className="bg-white dark:bg-zinc-900 rounded-xl p-4 border border-zinc-200 dark:border-zinc-800 mt-auto shadow-sm">
+            <div className="bg-white dark:bg-zinc-900 rounded-xl p-3 sm:p-4 border border-zinc-200 dark:border-zinc-800 lg:mt-auto shadow-sm">
               <h4 className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-3">Stats</h4>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-3 sm:gap-4">
                 <div className="bg-zinc-50 dark:bg-zinc-950 p-3 rounded border border-zinc-200 dark:border-zinc-800">
                   <span className="block text-2xl font-bold text-zinc-800 dark:text-zinc-100">
                     {tasks.filter((t) => t.status === TaskStatus.COMPLETED).length}
@@ -748,7 +748,7 @@ const App: React.FC = () => {
             </div>
           </div>
 
-          <div className="lg:col-span-8 h-full">
+          <div className="lg:col-span-8 lg:h-full min-h-[300px] sm:min-h-[400px]">
             <TaskQueue
               tasks={tasks}
               onClearCompleted={clearCompleted}

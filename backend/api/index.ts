@@ -1,9 +1,6 @@
+import 'dotenv/config';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
-
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
-}
 
 const app = express();
 
