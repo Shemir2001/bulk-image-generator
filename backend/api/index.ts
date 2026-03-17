@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(cors({
   origin: [
     'http://localhost:3000',
-    'https://nanobulkimagesgenerator.vercel.app',  // ← your frontend URL
+    'https://nanobulkimagesgenerator.vercel.app/',  // ← your frontend URL
     /\.vercel\.app$/  // ← allows all vercel.app subdomains
   ]
 }));
