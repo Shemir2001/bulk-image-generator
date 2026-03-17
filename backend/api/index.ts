@@ -1,18 +1,30 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 
-// ✅ Only use dotenv in local dev — Vercel injects env vars automatically
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 
 const app = express();
+
+// ✅ Handle OPTIONS preflight BEFORE everything else
+app.options('*', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.status(200).end();
+});
+
+// ✅ Apply CORS headers to ALL responses
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
+
+app.use(cors({ origin: '*' }));
 app.use(express.json());
-app.use(cors({
-  origin: '*',   // ✅ Allow all origins — simplest fix for Vercel
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}));
 
 const POLLINATIONS_KEY = process.env.POLLINATIONS_KEY || '';
 const HF_KEY = process.env.HF_KEY || '';
@@ -25,12 +37,10 @@ const ASPECT_SIZES: Record<string, { width: number; height: number }> = {
   "16:9": { width: 1024, height: 576  },
 };
 
-// ─── Health Check ──────────────────────────────────────
 app.get('/api/health', (_req: Request, res: Response) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// ─── Pollinations ──────────────────────────────────────
 app.post('/api/generate/pollinations', async (req: Request, res: Response) => {
   const { prompt, aspectRatio = '1:1', model = 'flux' } = req.body;
 
@@ -76,7 +86,6 @@ app.post('/api/generate/pollinations', async (req: Request, res: Response) => {
   }
 });
 
-// ─── Hugging Face ──────────────────────────────────────
 app.post('/api/generate/huggingface', async (req: Request, res: Response) => {
   const { prompt, aspectRatio = '1:1', model = 'stabilityai/stable-diffusion-xl-base-1.0' } = req.body;
 
@@ -119,13 +128,12 @@ app.post('/api/generate/huggingface', async (req: Request, res: Response) => {
     return res.status(500).json({ error: error.message || 'Server error' });
   }
 });
-// ─── Prompt Optimizer ──────────────────────────────────
+
 app.post('/api/optimize', async (req: Request, res: Response) => {
   const { prompts } = req.body;
   if (!prompts || !Array.isArray(prompts)) {
     return res.status(400).json({ error: 'Prompts array required' });
   }
-
   if (!HF_KEY) return res.status(500).json({ error: 'HF_KEY not configured' });
 
   try {
@@ -157,14 +165,13 @@ app.post('/api/optimize', async (req: Request, res: Response) => {
     return res.status(500).json({ error: error.message });
   }
 });
-// ✅ LOCAL DEV: start server normally
-// ✅ VERCEL: export app as serverless function
+
 if (process.env.NODE_ENV !== 'production') {
   const PORT = process.env.PORT || 3001;
-  app.listen(PORT, () => {
+  app.listen(PORT as number, () => {
     console.log(`\n✅ Backend running at http://localhost:${PORT}`);
-    console.log(`🌸 Pollinations key: ${POLLINATIONS_KEY ? '✅ loaded' : '❌ MISSING'}`);
-    console.log(`🤗 HuggingFace key:  ${HF_KEY ? '✅ loaded' : '❌ MISSING'}\n`);
+    console.log(`🌸 Pollinations: ${POLLINATIONS_KEY ? '✅' : '❌ MISSING'}`);
+    console.log(`🤗 HuggingFace:  ${HF_KEY ? '✅' : '❌ MISSING'}\n`);
   });
 }
 
