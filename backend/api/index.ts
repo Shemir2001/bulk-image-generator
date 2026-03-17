@@ -121,7 +121,44 @@ app.post('/api/generate/huggingface', async (req: Request, res: Response) => {
     return res.status(500).json({ error: error.message || 'Server error' });
   }
 });
+// ─── Prompt Optimizer ──────────────────────────────────
+app.post('/api/optimize', async (req: Request, res: Response) => {
+  const { prompts } = req.body;
+  if (!prompts || !Array.isArray(prompts)) {
+    return res.status(400).json({ error: 'Prompts array required' });
+  }
 
+  if (!HF_KEY) return res.status(500).json({ error: 'HF_KEY not configured' });
+
+  try {
+    const response = await fetch(
+      'https://router.huggingface.co/hf-inference/models/mistralai/Mistral-7B-Instruct-v0.3',
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${HF_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          inputs: `You are an expert AI image prompt engineer. Rewrite each prompt to be highly detailed and vivid. Return EXACTLY the same number of lines. No numbering, no bullets, just the prompts.\n\nInput:\n${prompts.join('\n')}`,
+          parameters: { max_new_tokens: 500, temperature: 0.7 },
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      return res.status(response.status).json({ error: 'Optimization failed' });
+    }
+
+    const data = await response.json() as any;
+    const text = data[0]?.generated_text || '';
+    const lines = text.split('\n').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+    return res.json({ optimized: lines.slice(0, prompts.length) });
+
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
+  }
+});
 // ✅ LOCAL DEV: start server normally
 // ✅ VERCEL: export app as serverless function
 if (process.env.NODE_ENV !== 'production') {

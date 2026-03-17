@@ -77,31 +77,52 @@ export const generateImage = async (
  * Optimizes a list of prompts using Gemini 3 Flash.
  */
 export const optimizePrompts = async (prompts: string[]): Promise<string[]> => {
-  if (prompts.length === 0) return [];
+  if (prompts.length === 0) return prompts;
+
+  const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
   try {
-    const promptText = prompts.join('\n');
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
-      contents: `You are an expert AI image prompt engineer. I have a list of image ideas. Rewrite each one to be highly detailed, vivid, and optimized for a high-quality generative AI model. 
-      
-      Rules:
-      1. Improve clarity, lighting, and style descriptors.
-      2. Keep the meaning of the original idea.
-      3. Return EXACTLY the same number of lines as the input.
-      4. Do not add numbering or bullet points.
-      5. Output ONLY the raw list of optimized prompts.
-
-      Input Prompts:
-      ${promptText}`,
+    const response = await fetch(`${API_BASE}/api/optimize`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompts }),
     });
 
-    const optimizedText = response.text?.trim() || "";
-    if (!optimizedText) return prompts;
+    if (!response.ok) return prompts; // fallback to original
 
-    return optimizedText.split('\n').map(s => s.trim()).filter(s => s.length > 0);
-  } catch (error) {
-    console.error("Optimization failed:", error);
-    return prompts; // Fallback to original
+    const data = await response.json();
+    return data.optimized || prompts;
+
+  } catch {
+    return prompts; // fallback silently
   }
 };
+// export const optimizePrompts = async (prompts: string[]): Promise<string[]> => {
+//   if (prompts.length === 0) return [];
+
+//   try {
+//     const promptText = prompts.join('\n');
+//     const response = await ai.models.generateContent({
+//       model: 'gemini-3-flash-preview',
+//       contents: `You are an expert AI image prompt engineer. I have a list of image ideas. Rewrite each one to be highly detailed, vivid, and optimized for a high-quality generative AI model. 
+      
+//       Rules:
+//       1. Improve clarity, lighting, and style descriptors.
+//       2. Keep the meaning of the original idea.
+//       3. Return EXACTLY the same number of lines as the input.
+//       4. Do not add numbering or bullet points.
+//       5. Output ONLY the raw list of optimized prompts.
+
+//       Input Prompts:
+//       ${promptText}`,
+//     });
+
+//     const optimizedText = response.text?.trim() || "";
+//     if (!optimizedText) return prompts;
+
+//     return optimizedText.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+//   } catch (error) {
+//     console.error("Optimization failed:", error);
+//     return prompts; // Fallback to original
+//   }
+// };
