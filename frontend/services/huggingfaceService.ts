@@ -86,7 +86,7 @@
 // };
 import { GenerationResult } from "../types";
 
-const API_BASE = import.meta.env.DEV ? 'http://localhost:3001' : '';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 export const HF_FREE_MODELS = [
   { id: "stabilityai/stable-diffusion-xl-base-1.0", label: "SDXL Base (Best Quality)" },

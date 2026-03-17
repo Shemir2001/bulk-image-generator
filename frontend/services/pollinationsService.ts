@@ -1,7 +1,7 @@
 import { GenerationResult } from "../types";
 
 // Points to your Express backend — change to your Vercel URL when deploying
-const API_BASE = import.meta.env.DEV ? 'http://localhost:3001' : '';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 export const generateImagePollinations = async (
   prompt: string,
