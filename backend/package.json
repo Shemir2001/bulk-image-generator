@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "ts-node-dev --respawn api/index.ts",
-    "build": "tsc",
+    "build": "echo 'No build needed for Vercel'",
     "start": "node dist/api/index.js"
   },
   "dependencies": {

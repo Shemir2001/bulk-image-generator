@@ -8,7 +8,13 @@ if (process.env.NODE_ENV !== 'production') {
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'https://nanobulkimagesgenerator.vercel.app',  // ← your frontend URL
+    /\.vercel\.app$/  // ← allows all vercel.app subdomains
+  ]
+}));
 
 const POLLINATIONS_KEY = process.env.POLLINATIONS_KEY || '';
 const HF_KEY = process.env.HF_KEY || '';
